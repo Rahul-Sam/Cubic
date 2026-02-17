@@ -18,13 +18,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-  useCallback,
-  memo,
-} from "react";
+import React, { useEffect, useMemo, useState, useCallback, memo } from "react";
 
 type Props = {
   onSelect: (device: Device) => void;
@@ -112,24 +106,23 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  if (!devices.length) return;
+    if (!devices.length) return;
 
-  const links: HTMLLinkElement[] = [];
+    const links: HTMLLinkElement[] = [];
 
-  devices.forEach((device) => {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "image";
-    link.href = `${BASE_URL}/v1/flavors/${device?.flavor}/productimage`;
-    document.head.appendChild(link);
-    links.push(link);
-  });
+    devices.forEach((device) => {
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = `${BASE_URL}/v1/flavors/${device?.flavor}/productimage`;
+      document.head.appendChild(link);
+      links.push(link);
+    });
 
-  return () => {
-    links.forEach((link) => document.head.removeChild(link));
-  };
-}, [devices, BASE_URL]);
-
+    return () => {
+      links.forEach((link) => document.head.removeChild(link));
+    };
+  }, [devices, BASE_URL]);
 
   /* =========================
      FETCH DEVICES
@@ -148,9 +141,7 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
 
         const data = await response.json();
 
-        const filteredData = data.filter(
-          (device: any) => device.peripheral !== true
-        );
+        const filteredData = data.filter((device: any) => !device.peripherals);
 
         setDevices(filteredData);
       } catch (error) {
@@ -170,7 +161,7 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
     (device: any) => {
       onSelect(device);
     },
-    [onSelect]
+    [onSelect],
   );
 
   /* =========================
@@ -179,8 +170,7 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
   const filteredDevices = useMemo(() => {
     return devices.filter((device) => {
       const matchesFilter =
-        filter === "All" ||
-        device.type?.toLowerCase() === filter.toLowerCase();
+        filter === "All" || device.type?.toLowerCase() === filter.toLowerCase();
 
       const matchesSearch =
         device.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -194,7 +184,6 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #eef2f7 0%, #f7f9fc 100%)",
         py: 8,
       }}
     >
@@ -259,7 +248,7 @@ export default function SelectDevice({ onSelect, onBack }: Props) {
                       borderRadius: 2,
                       background:
                         filter === item ? "primary.main" : "transparent",
-                      color: filter === item ? "#fff" : "text.primary",
+                      color: filter === item ? "#1807b4" : "text.primary",
                     }}
                   >
                     {item}

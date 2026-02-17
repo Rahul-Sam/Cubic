@@ -16,6 +16,10 @@ export default function DeviceWizard() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [activeStep, setActiveStep] = useState(0);
+
+  // ✅ NEW: Project state
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
   const [configData, setConfigData] = useState<DeviceConfig | null>(null);
 
@@ -24,8 +28,13 @@ export default function DeviceWizard() {
   -------------------------------------------------- */
   useEffect(() => {
     try {
+      const savedProject = localStorage.getItem("selectedProject");
       const savedDevice = localStorage.getItem("selectedDevice");
       const savedConfig = localStorage.getItem("configData");
+
+      if (savedProject) {
+        setSelectedProject(savedProject);
+      }
 
       if (savedDevice) {
         setSelectedDevice(JSON.parse(savedDevice));
@@ -36,8 +45,7 @@ export default function DeviceWizard() {
       }
     } catch (err) {
       console.error("Failed to restore wizard state:", err);
-      localStorage.removeItem("selectedDevice");
-      localStorage.removeItem("configData");
+      localStorage.clear();
     }
   }, []);
 
@@ -65,6 +73,10 @@ export default function DeviceWizard() {
      🔹 Guard invalid navigation
   -------------------------------------------------- */
   useEffect(() => {
+    if (activeStep >= 1 && !selectedProject) {
+      setActiveStep(0);
+    }
+
     if (activeStep >= 2 && !selectedDevice) {
       setActiveStep(1);
     }
@@ -72,7 +84,7 @@ export default function DeviceWizard() {
     if (activeStep >= 3 && !configData) {
       setActiveStep(2);
     }
-  }, [activeStep, selectedDevice, configData]);
+  }, [activeStep, selectedProject, selectedDevice, configData]);
 
   /* --------------------------------------------------
      🔹 Navigation
@@ -83,6 +95,14 @@ export default function DeviceWizard() {
   /* --------------------------------------------------
      🔹 Step Handlers
   -------------------------------------------------- */
+
+  // ✅ NEW: Handle project selection
+  const handleProjectSelect = (project: string) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", project);
+    next();
+  };
+
   const handleDeviceSelect = (device: Device) => {
     setSelectedDevice(device);
     localStorage.setItem("selectedDevice", JSON.stringify(device));
@@ -96,8 +116,11 @@ export default function DeviceWizard() {
   };
 
   const handleReset = () => {
+    localStorage.removeItem("selectedProject");
     localStorage.removeItem("selectedDevice");
     localStorage.removeItem("configData");
+
+    setSelectedProject(null);
     setSelectedDevice(null);
     setConfigData(null);
     setActiveStep(0);
@@ -110,9 +133,11 @@ export default function DeviceWizard() {
     <Box sx={{ minHeight: "100vh", py: 6 }}>
       <CustomStepper activeStep={activeStep} />
 
-      {activeStep === 0 && <SelectProject onSelect={next} />}
+      {activeStep === 0 && (
+        <SelectProject onSelect={handleProjectSelect} />
+      )}
 
-      {activeStep === 1 && (
+      {activeStep === 1 && selectedProject && (
         <SelectDevice
           onSelect={handleDeviceSelect}
           onBack={back}
@@ -121,20 +146,24 @@ export default function DeviceWizard() {
 
       {activeStep === 2 && selectedDevice && (
         <ConfigureStep
-          device={selectedDevice} 
+          device={selectedDevice}
           onComplete={handleConfigComplete}
           onBack={back}
         />
       )}
 
-      {activeStep === 3 && selectedDevice && configData && (
-        <ConfirmStep
-          device={selectedDevice}
-          config={configData}
-          onBack={back}
-          onReset={handleReset}
-        />
-      )}
+      {activeStep === 3 &&
+        selectedProject &&
+        selectedDevice &&
+        configData && (
+          <ConfirmStep
+            project={selectedProject} // ✅ now passed correctly
+            device={selectedDevice}
+            config={configData}
+            onBack={back}
+            onReset={handleReset}
+          />
+        )}
     </Box>
   );
 }

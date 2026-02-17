@@ -99,9 +99,7 @@ export default function ConfigureStep({ onComplete, onBack }: Props) {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #eef2f7 0%, #e3e8f4 40%, #dde3f2 100%)",
+        minHeight: "100vh",       
         display: "flex",
         alignItems: "center",
       }}
