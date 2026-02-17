@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import StatCard from "../../components/StatCard";
+
 import SearchInput from "../../components/SearchInput";
 import StatusChip from "../../components/StatusChip";
 import AddButton from "../../components/addButton";
@@ -32,7 +32,7 @@ export default function DashboardPage() {
       >
         <Grid container spacing={4}>
           <Grid size={4}>
-            <Box sx={{ m: 2 }}>
+            <Box sx={{ m: 0 }}>
               <Typography variant="h4" fontWeight={700}>
                 Dashboard
               </Typography>
@@ -44,15 +44,14 @@ export default function DashboardPage() {
 
           <Grid size={8} sx={{ float: "right" }}>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <SearchInput />
+              {/* <SearchInput /> */}
               <AddButton />
             </Box>
           </Grid>
         </Grid>
 
         <DevicesTable />
-        <br />
-         <DevicesTable2 />
+        {/* <DevicesTable2 /> */}
       </Box>
     </>
   );

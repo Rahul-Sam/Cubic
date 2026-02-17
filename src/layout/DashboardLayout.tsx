@@ -37,7 +37,6 @@ export default function DashboardLayout() {
   const handleLogout = () => {
     handleClose();
     console.log("Logout clicked");
-
     // 👉 Example logout redirect
     navigate("/login");
   };
@@ -47,9 +46,9 @@ export default function DashboardLayout() {
       {/* ================= App Bar ================= */}
       <AppTopBar
         logo={logo}
-        userName="Mohit Nair"
+        userName="Judge"
         userEmail="mohit@judge.com"
-        userInitials="MN"
+        userInitials="J"
         coreHours="1594 core-hours used"
         onLogout={() => {
           console.log("Logout clicked");
@@ -57,7 +56,7 @@ export default function DashboardLayout() {
       />
 
       {/* ================= Page Content ================= */}
-      <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Container maxWidth="xxl" sx={{ py: 4 }}>
         <Outlet />
       </Container>
     </Box>

@@ -11,9 +11,9 @@ export default function LeftNavLayout() {
       {/* Top App Bar */}
       <AppTopBar
         logo={logo}
-        userName="Mohit Nair"
-        userEmail="mohit@judge.com"
-        userInitials="MN"
+        userName="Judge"
+        userEmail="admin@judge.com"
+        userInitials="J"
         coreHours="1594 core-hours used"
         onLogout={() => {
           console.log("Logout clicked");
@@ -24,13 +24,14 @@ export default function LeftNavLayout() {
       <Box sx={{ display: "flex", flexGrow: 1 }}>
         
         {/* Left Sidebar */}
-        <LeftSidebar />
+
+        {/* <LeftSidebar /> */}
 
         {/* Main Content */}
         <Box
           sx={{
             flexGrow: 1,
-            background: "linear-gradient(90deg, #eef2f7, #e6ecf5)",
+            //background: "linear-gradient(90deg, #eef2f7, #e6ecf5)",
             p: 3,
           }}
         >

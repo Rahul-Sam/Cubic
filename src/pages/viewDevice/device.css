@@ -1,0 +1,472 @@
+.page {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  padding: 18px 18px 28px;
+}
+
+.logo {
+  width: 180px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 10px 30px rgba(2, 6, 23, 0.25));
+}
+.topbar {
+  height: 108px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+
+.crumb {
+  font-weight: 700;
+  color: #0b3a6a;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  position: absolute;
+  right: 10px;
+}
+.pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #999;
+}
+.pill.ok {
+  background: rgba(16, 185, 129, 0.15);
+  color: #065f46;
+}
+.pill.ok .dot {
+  background: #10b981;
+}
+.pill.bad {
+  background: rgba(239, 68, 68, 0.15);
+  color: #7f1d1d;
+}
+.pill.bad .dot {
+  background: #ef4444;
+}
+
+.grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.validatorCard {
+  padding: 18px;
+}
+.cardTitle {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  background: var(--blue);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  z-index: 2;
+}
+
+/* ===== Device area ===== */
+.deviceZone {
+  margin-top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  /* width: min(420px, 100%); */
+}
+
+.deviceImg {
+  width: 450px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 30px rgba(2, 6, 23, 0.25));
+}
+
+/* ✅ Display INSIDE screen white area (responsive using %) */
+.deviceDisplay {
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 66px; /* inside white screen area */
+  width: 315px;
+  height: 188px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.deviceDisplay.GO {
+  background: rgba(16, 185, 129, 1);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+.deviceDisplay.DENIED {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 1);
+}
+
+.displayTitle {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
+.deviceDisplay.GO .displayTitle {
+  color: #0f5132;
+}
+.deviceDisplay.DENIED .displayTitle {
+  color: #7f1d1d;
+}
+
+.displaySub {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.displayArrow {
+  margin-top: 8px;
+  font-size: 28px;
+  color: rgba(15, 23, 42, 0.5);
+}
+
+.displayResult {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  text-align: left;
+}
+
+.resultRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  padding: 2px 0;
+}
+.resultRow .k {
+  font-weight: 900;
+  color: #0b3a6a;
+}
+.resultRow .v {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+/* ✅ Tap button on device BODY area (not on screen) */
+.deviceTapButton {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 340px; /* device body area */
+  width: 44%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background: #2c77c7;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(31, 111, 178, 0.25);
+  z-index: 4;
+}
+
+/* Ripple layer (doesn't block clicks) */
+.ripple-container {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(25, 118, 210, 0.35);
+  animation: rippleAnim 2.4s infinite;
+}
+
+.ripple1 {
+  animation-delay: 0s;
+}
+
+.ripple2 {
+  animation-delay: 1.2s;
+}
+
+@keyframes rippleAnim {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Controls */
+.controls {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.control label {
+  display: block;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.75);
+  margin-bottom: 6px;
+  font-weight: 800;
+}
+
+/* Dropdown visible always */
+.control select,
+.control select option {
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+
+.control select {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  outline: none;
+}
+
+/* History */
+.history {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+.historyTitle {
+  font-weight: 900;
+  color: #0b3a6a;
+  margin-bottom: 10px;
+}
+.historyEmpty {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.65);
+}
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.historyItem {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: white;
+}
+.historyItem.GO {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.08);
+}
+.historyItem.DENIED {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.hTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.hUid {
+  font-weight: 900;
+  font-size: 13px;
+}
+.hBadge {
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.hBadge.GO {
+  background: rgba(16, 185, 129, 0.22);
+  color: #065f46;
+}
+.hBadge.DENIED {
+  background: rgba(239, 68, 68, 0.22);
+  color: #7f1d1d;
+}
+
+.hMid {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.85);
+  font-weight: 700;
+}
+.hBot {
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.7);
+}
+.hReason {
+  font-weight: 800;
+}
+.hTs {
+  font-weight: 800;
+}
+
+/* Fare card */
+.fareCard {
+  padding: 18px;
+}
+.fareHeader {
+  text-align: center;
+  font-weight: 900;
+  color: #0b3a6a;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.divider {
+  height: 1px;
+  background: rgba(15, 23, 42, 0.12);
+  margin: 10px 0 18px;
+}
+
+.fareList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+.rowLabel {
+  font-weight: 900;
+  color: #0b3a6a;
+}
+.rowValue {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.metaBox {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px dashed rgba(15, 23, 42, 0.15);
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(15, 23, 42, 0.85);
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diamond-btn {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(145deg, #4da3ff, #1c6dd0);
+  transform: rotate(45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: 0.3s ease;
+  position: absolute;
+  top: 355px;
+  z-index: 2;
+}
+
+.diamond-btn:hover {
+  transform: rotate(45deg) scale(1.05);
+}
+
+.diamond-content {
+  transform: rotate(-45deg);
+  text-align: center;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.diamond-content span {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.diamond-content i {
+  font-size: 28px;
+  margin-top: 8px;
+}

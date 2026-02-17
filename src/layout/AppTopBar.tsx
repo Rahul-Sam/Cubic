@@ -59,7 +59,7 @@ export default function AppTopBar({
         borderBottom: "1px solid rgba(0,0,0,0.06)",
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth="xxl">
         <Toolbar
           sx={{
             justifyContent: "space-between",

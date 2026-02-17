@@ -10,7 +10,7 @@ const AddButton: React.FC = () => {
     <Button
       variant="contained"
       startIcon={<AddIcon />}
-      onClick={() => navigate("/devices")}
+      //onClick={() => navigate("/devices")}
       sx={{
         borderRadius: "12px",
         textTransform: "none",
