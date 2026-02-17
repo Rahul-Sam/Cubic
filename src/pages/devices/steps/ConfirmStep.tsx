@@ -13,9 +13,20 @@ import {
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 
+/* ✅ Proper device type */
+type DeviceType = {
+  type?: string;
+  name?: string;
+  flavor?: string;
+  description?: string;
+  model?: string;
+  peripherals?: any;
+  quotas?: any;
+} | null;
+
 type Props = {
   project: string | null;
-  device: string | null;
+  device: DeviceType;
   config: any;
   onBack: () => void;
 };
@@ -26,8 +37,9 @@ export default function ConfirmStep({
   config,
   onBack,
 }: Props) {
-  // ✅ Local state for manual entry
-const [deviceName, setDeviceName] = useState("");
+  const [deviceName, setDeviceName] = useState(
+    config?.deviceName || ""
+  );
 
   const [touched, setTouched] = useState(false);
 
@@ -96,7 +108,7 @@ const [deviceName, setDeviceName] = useState("");
           {/* Content */}
           <Grid container spacing={6}>
             {/* LEFT SIDE */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography
                 variant="body2"
                 color="text.secondary"
@@ -130,8 +142,9 @@ const [deviceName, setDeviceName] = useState("");
               >
                 Model
               </Typography>
+
               <Typography mt={1} mb={4}>
-                {device || "i.MX 8M Plus"}
+                {device?.name || device?.model || "i.MX 8M Plus"}
               </Typography>
 
               <Typography
@@ -140,16 +153,15 @@ const [deviceName, setDeviceName] = useState("");
               >
                 Firmware type
               </Typography>
+
               <Typography mt={1}>
-                Stock example
+                {device?.flavor || "Stock example"}
               </Typography>
             </Grid>
 
             {/* RIGHT SIDE */}
             <Grid
-              item
-              xs={12}
-              md={6}
+              size={{ xs: 12, md: 6 }}
               sx={{ pl: { xs: 0, md: 6 } }}
             >
               <Typography
@@ -158,6 +170,7 @@ const [deviceName, setDeviceName] = useState("");
               >
                 Project
               </Typography>
+
               <Typography mt={1} mb={4}>
                 {project || "Default Project"}
               </Typography>
@@ -168,6 +181,7 @@ const [deviceName, setDeviceName] = useState("");
               >
                 Firmware name
               </Typography>
+
               <Typography mt={1}>
                 Yocto Linux (full) (2.2.1)
               </Typography>

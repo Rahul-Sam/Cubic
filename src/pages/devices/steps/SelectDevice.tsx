@@ -256,7 +256,7 @@ useEffect(() => {
                     >
                       <Box
                         component="img"
-                        src={`${BASE_URL}/v1/flavors/${device.flavor}/productimage`}
+                        src={`${BASE_URL}/v1/flavors/${device?.flavor}/productimage`}
                         sx={{
                           maxHeight: 130,
                           maxWidth: "100%",
