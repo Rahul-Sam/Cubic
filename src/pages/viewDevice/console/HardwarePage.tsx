@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ARMConsole from "./ARMConsole";
 
-const SOCKET_URL = "wss://cubic.judgeindiasolutions.com/api/wss/console";
+const SOCKET_URL = "wss://cubic.judgeindiasolutions.com/api/ws/console";
 
 const HardwarePage = () => {
   const [connected, setConnected] = useState(false);
