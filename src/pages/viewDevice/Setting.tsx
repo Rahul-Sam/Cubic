@@ -164,7 +164,7 @@ export default function Settings( props: { deviceName?: string; model?: string }
           </Box>
 
           <Box display="flex" alignItems="center" gap={1.5}>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{
                 borderRadius: 0.5,
@@ -181,7 +181,7 @@ export default function Settings( props: { deviceName?: string; model?: string }
               }}
             >
               Back
-            </Button>
+            </Button> */}
 
             <Button
               variant="contained"
