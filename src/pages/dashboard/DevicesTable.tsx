@@ -19,9 +19,7 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
 import Swal from "sweetalert2";
-
 
 export default function DevicesTable() {
   const navigate = useNavigate();
@@ -35,12 +33,12 @@ export default function DevicesTable() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = React.useState<any>(null);
 
-  // ✅ Pagination State
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   const open = Boolean(anchorEl);
 
+  /* ---------------- FETCH DEVICES ---------------- */
   React.useEffect(() => {
     const fetchDevices = async () => {
       try {
@@ -67,8 +65,8 @@ export default function DevicesTable() {
             item.state === "on"
               ? "On"
               : item.state === "error"
-                ? "Error"
-                : "Off",
+              ? "Error"
+              : "Off",
           model: item.flavorName || "—",
           createdBy: item.createdBy?.username || "—",
           createdAt: item.created
@@ -88,104 +86,112 @@ export default function DevicesTable() {
     fetchDevices();
   }, []);
 
+  /* ---------------- MENU HANDLERS ---------------- */
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, row: any) => {
     setAnchorEl(event.currentTarget);
     setSelectedRow(row);
-  };
-
-  const handleOpenDevice = (row: any) => {
-    navigate(`/view/${row.id}`, {
-      state: { device: row },
-    });
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  const handleView = () => {
-    if (selectedRow) {
-      handleOpenDevice(selectedRow);
-    }
-    handleMenuClose();
+  /* ---------------- OPEN SAME WINDOW ---------------- */
+  const handleOpenDevice = (row: any) => {
+    navigate(`/view/${row.id}`, {
+      state: { device: row },
+    });
   };
 
-const handleTogglePower = async () => {
-  if (!selectedRow) return;
+  /* ---------------- OPEN NEW WINDOW ---------------- */
+  const handleOpenNewWindow = () => {
+    if (!selectedRow) return;
 
-  // ✅ CLOSE MENU IMMEDIATELY
-  handleMenuClose();
+    handleMenuClose();
 
-  const isOn = selectedRow.state === "On";
-  const actionText = isOn ? "Turn Off" : "Turn On";
-  const actionApi = isOn ? "stop" : "start";
+    window.open(
+      `/view/${selectedRow.id}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
 
-  const result = await Swal.fire({
-    title: `${actionText} Device?`,
-    text: `Are you sure you want to ${actionText.toLowerCase()} "${selectedRow.name}"?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: isOn ? "#d33" : "#3085d6",
-    cancelButtonColor: "#6c757d",
-    confirmButtonText: `Yes, ${actionText}`,
-  });
+  /* ---------------- POWER TOGGLE ---------------- */
+  const handleTogglePower = async () => {
+    if (!selectedRow) return;
 
-  if (!result.isConfirmed) return;
+    handleMenuClose();
 
-  try {
-    const response = await fetch(
-      `${BASE_URL}/v1/instances/${selectedRow.id}/${actionApi}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-        },
+    const isOn = selectedRow.state === "On";
+    const actionApi = isOn ? "stop" : "start";
+
+    const result = await Swal.fire({
+      title: `${isOn ? "Turn Off" : "Turn On"} Device?`,
+      text: `Are you sure you want to ${
+        isOn ? "turn off" : "turn on"
+      } "${selectedRow.name}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: isOn ? "#d33" : "#3085d6",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: `Yes`,
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/v1/instances/${selectedRow.id}/${actionApi}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to toggle power");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to toggle power");
+      setDevices((prev) =>
+        prev.map((device) =>
+          device.id === selectedRow.id
+            ? { ...device, state: isOn ? "Off" : "On" }
+            : device
+        )
+      );
+
+      await Swal.fire({
+        title: "Success!",
+        text: `Device ${isOn ? "stopped" : "started"} successfully.`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      await Swal.fire({
+        title: "Error",
+        text: "Failed to change device state.",
+        icon: "error",
+      });
     }
+  };
 
-    setDevices((prev) =>
-      prev.map((device) =>
-        device.id === selectedRow.id
-          ? { ...device, state: isOn ? "Off" : "On" }
-          : device
-      )
-    );
-
-    await Swal.fire({
-      title: "Success!",
-      text: `Device ${isOn ? "stopped" : "started"} successfully.`,
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
-
-  } catch (error) {
-    await Swal.fire({
-      title: "Error",
-      text: "Failed to change device state.",
-      icon: "error",
-    });
-  }
-};
-
-
-
-  const handleChangePage = (event: unknown, newPage: number) => {
+  /* ---------------- PAGINATION ---------------- */
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  /* ---------------- UI ---------------- */
   return (
     <Box sx={{ mt: 2 }}>
       <Paper
@@ -204,8 +210,6 @@ const handleTogglePower = async () => {
             py: 2,
             backgroundImage: "url(./table-bg-1.png)",
             backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
           }}
         >
           <Typography variant="h6" sx={{ color: "#ffffff", fontWeight: 600 }}>
@@ -213,21 +217,18 @@ const handleTogglePower = async () => {
           </Typography>
         </Box>
 
-        {/* Loading */}
         {loading && (
           <Box sx={{ p: 4, textAlign: "center" }}>
             <CircularProgress />
           </Box>
         )}
 
-        {/* Error */}
         {error && (
           <Box sx={{ p: 4, textAlign: "center" }}>
             <Typography color="error">{error}</Typography>
           </Box>
         )}
 
-        {/* Table */}
         {!loading && !error && (
           <>
             <TableContainer>
@@ -244,56 +245,39 @@ const handleTogglePower = async () => {
                 </TableHead>
 
                 <TableBody>
-                  {devices.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={6} align="center">
-                        No instances found
-                      </TableCell>
-                    </TableRow>
-                  )}
-
                   {devices
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <TableRow key={row.id} hover>
                         <TableCell>
-                          {row.state === "Off" ? (
-                            <Typography
-                              sx={{
-                                fontWeight: 600,
-                                color: "text.secondary",
-                                cursor: "not-allowed",
-                              }}
-                            >
-                              {row.name}
-                            </Typography>
-                          ) : (
-                            <Typography
-                              onClick={() =>
-                                row.state !== "Off" && handleOpenDevice(row)
-                              }
-                              sx={{
-                                fontWeight: 600,
-                                color:
-                                  row.state === "Off"
-                                    ? "text.secondary"
-                                    : "primary.main",
-                                cursor:
-                                  row.state === "Off"
-                                    ? "not-allowed"
-                                    : "pointer",
-                                "&:hover":
-                                  row.state !== "Off"
-                                    ? { textDecoration: "underline" }
-                                    : {},
-                              }}
-                            >
-                              {row.name}
-                            </Typography>
-                          )}
+                          <Typography
+                            onClick={() =>
+                              row.state !== "Off" &&
+                              handleOpenDevice(row)
+                            }
+                            sx={{
+                              fontWeight: 600,
+                              color:
+                                row.state === "Off"
+                                  ? "text.secondary"
+                                  : "primary.main",
+                              cursor:
+                                row.state === "Off"
+                                  ? "not-allowed"
+                                  : "pointer",
+                              "&:hover":
+                                row.state !== "Off"
+                                  ? { textDecoration: "underline" }
+                                  : {},
+                            }}
+                          >
+                            {row.name}
+                          </Typography>
 
-                          <br />
-                          <Typography variant="caption" color="text.secondary">
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                          >
                             v{row.version}
                           </Typography>
                         </TableCell>
@@ -307,15 +291,8 @@ const handleTogglePower = async () => {
                                 row.state === "On"
                                   ? "#d1fae5"
                                   : row.state === "Error"
-                                    ? "#fee2e2"
-                                    : "#e5e7eb",
-                              color:
-                                row.state === "On"
-                                  ? "#065f46"
-                                  : row.state === "Error"
-                                    ? "#991b1b"
-                                    : "#374151",
-                              fontWeight: 500,
+                                  ? "#fee2e2"
+                                  : "#e5e7eb",
                             }}
                           />
                         </TableCell>
@@ -345,20 +322,23 @@ const handleTogglePower = async () => {
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[15, 25, 50]}
             />
           </>
         )}
 
         {/* Dropdown */}
         <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-          <MenuItem onClick={handleView}>Open</MenuItem>
+          <MenuItem onClick={handleOpenNewWindow}>
+            Open in New Window
+          </MenuItem>
 
           <MenuItem
             onClick={handleTogglePower}
             disabled={selectedRow?.state === "Error"}
           >
-            {selectedRow?.state === "On" ? "Turn Off" : "Turn On"}
+            {selectedRow?.state === "On"
+              ? "Turn Off"
+              : "Turn On"}
           </MenuItem>
 
           <Divider />
