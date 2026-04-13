@@ -90,12 +90,12 @@ const ARMConsole: React.FC<ARMConsoleProps> = ({
         mb={1}
       >
         <Typography variant="h6">{title}</Typography>
-
+{/* 
         <Chip
           label={connected ? "Connected" : "Disconnected"}
           color={connected ? "success" : "error"}
           size="small"
-        />
+        /> */}
       </Stack>
 
       <Paper sx={{ height: "70vh", bgcolor: "#000", borderRadius: "0px" }} >

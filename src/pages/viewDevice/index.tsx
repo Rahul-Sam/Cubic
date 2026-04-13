@@ -287,8 +287,9 @@ function ListDevice() {
       </Box>
 
       <Grid container spacing={2}>
-        <Grid size={6}>
+        <Grid size={4} >
           <Paper sx={{ p: 2 }} style={{ height: "100%", position: "relative" }}>
+            <div style={{display: "none"}}>
             <div className="top-right" style={{ marginTop: "20px" }}>
               <div className={`pill ${connected ? "ok" : "bad"}`}>
                 <span className="dot" />
@@ -420,15 +421,18 @@ function ListDevice() {
                 ))}
               </select>
             </Box>
+
+            </div>
+            <img src="/image.jpeg" alt="" style={{maxWidth: "100%", padding: "20px", marginTop: "20px"}} />
           </Paper>
         </Grid>
 
-        <Grid size={6}>
+        <Grid size={8}>
           <Paper sx={{ p: 2, height: "100%" }}>
             <HardwarePage />
           </Paper>
         </Grid>
-        <Grid size={6}>
+        <Grid size={6} style={{display: "none"}}>
           {/* RIGHT fare details */}
 
           <Paper
@@ -529,7 +533,7 @@ function ListDevice() {
           </Paper>
         </Grid>
 
-        <Grid size={6}>
+        <Grid size={6} style={{display: "none"}}>
           {/* LEFT */}
           <Paper sx={{ p: 2, height: "100%" }}>
             {/* ===== TRIP HISTORY ===== */}
@@ -591,8 +595,8 @@ function ListDevice() {
       </Grid>
 
 {/* //Device: {deviceData?.name} - {deviceData?.model} */}
-      <Settings deviceName={deviceData?.name} model={deviceData?.model} />
-      <View />
+      {/* <Settings deviceName={deviceData?.name} model={deviceData?.model} />
+      <View /> */}
     </Box>
   );
 }
